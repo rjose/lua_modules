@@ -2,7 +2,12 @@ local func = require('functional')
 
 Tags = {}
 
-function parse_tags(tag_string)
+--------------------------------------------------------------------------------
+-- Parses tags-like string into table.
+--
+-- tag_string looks like "key1:value1,key2:value2"
+--
+function Tags.parse_tags(tag_string)
 	local result = {}
 
 	if not tag_string then return result end
@@ -11,14 +16,21 @@ function parse_tags(tag_string)
 	tags = tag_string:split(",")
 	for _, str in pairs(tags) do
 		local tag, value = unpack(str:split(":"))
+
+                -- Try converting value to a number
+                local num = tonumber(value)
+                if num then value = num end
+
 		result[tag] = value
 	end
 
 	return result
 end
-Tags.parse_tags = parse_tags
 
-function tags_to_string(tags, sep)
+--------------------------------------------------------------------------------
+-- Converts table to tags-like string.
+--
+function Tags.tags_to_string(tags, sep)
         if not tags then
                 return ""
         end
@@ -39,6 +51,5 @@ function tags_to_string(tags, sep)
         -- Strip trailing comma
         return result:sub(1, -(1 + string.len(sep)))
 end
-Tags.tags_to_string = tags_to_string
 
 return Tags
