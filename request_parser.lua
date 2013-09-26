@@ -43,7 +43,8 @@ function RequestParser.parse_request(req_str)
 
         -- Parse out path pieces and query params
         local qparams_pieces = result.request_target:split("?")
-        result.path_pieces = qparams_pieces[1]:split("/")
+        result.path = qparams_pieces[1]
+        result.path_pieces = result.path:split("/")
 
         if #qparams_pieces == 2 then
                 result.qparams = parse_query_params(qparams_pieces[2])

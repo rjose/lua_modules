@@ -8,16 +8,14 @@ local RequestRouter = {}
 -- In order to use this, you need to add routers to RequestRouter.routers. For
 -- instance, to serve static files, you would do
 --
---      RequestRouter.routers = {static_file_router}
---
--- See tests/test_route_request.lua for examples
+--      RequestRouter.handlers = {handle_static_file}
 --
 
 --==============================================================================
 -- Parameters
 --
 RequestRouter.public_dir = "public"
-RequestRouter.routers = {}
+RequestRouter.handlers = {}
 
 
 --==============================================================================
@@ -52,7 +50,7 @@ end
 --------------------------------------------------------------------------------
 -- Serves files from disk.
 --
-function RequestRouter.static_file_router(req)
+function RequestRouter.handle_static_file(req)
         local result
         local path = ''
         local file
@@ -89,11 +87,11 @@ end
 
 
 --------------------------------------------------------------------------------
--- Routes requests using all specified routers.
+-- Routes requests using all specified handlers.
 --
 function RequestRouter.route_request(req)
         local result
-        for _, r in ipairs(RequestRouter.routers) do
+        for _, r in ipairs(RequestRouter.handlers) do
                 result = r(req)
                 if result then break end
         end
